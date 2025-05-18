@@ -1,0 +1,99 @@
+{
+  "categories": [
+    {
+      "id": "beverages",
+      "name": "Beverages",
+      "products": [
+        {
+          "id": "P001",
+          "name": "Vinamilk Milk",
+          "status": "in_stock",
+          "shelf_location": {
+            "aisle_id": "A1",
+            "shelf_id": "S10",
+            "location": { "x": 12.4, "y": 8.2 },
+            "shelf_position": "middle"
+          }
+        },
+        {
+          "id": "P002",
+          "name": "Green Tea",
+          "status": "out_of_stock",
+          "shelf_location": {
+            "aisle_id": "A1",
+            "shelf_id": "S11",
+            "location": { "x": 4.1, "y": 10.3 },
+            "shelf_position": "top"
+          }
+        },
+        {
+          "id": "P003",
+          "name": "Coca Cola",
+          "status": "in_stock",
+          "shelf_location": {
+            "aisle_id": "A1",
+            "shelf_id": "S12",
+            "location": { "x": 5.2, "y": 6.7 },
+            "shelf_position": "bottom"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dairy",
+      "name": "Dairy Products",
+      "products": [
+        {
+          "id": "P004",
+          "name": "Butter",
+          "status": "in_stock",
+          "shelf_location": {
+            "aisle_id": "A2",
+            "shelf_id": "S15",
+            "location": { "x": 15.3, "y": 5.4 },
+            "shelf_position": "middle"
+          }
+        },
+        {
+          "id": "P005",
+          "name": "Cheese",
+          "status": "out_of_stock",
+          "shelf_location": {
+            "aisle_id": "A2",
+            "shelf_id": "S16",
+            "location": { "x": 13.4, "y": 9.1 },
+            "shelf_position": "top"
+          }
+        }
+      ]
+    },
+    {
+      "id": "snacks",
+      "name": "Snacks",
+      "products": [
+        {
+          "id": "P006",
+          "name": "Chips",
+          "status": "in_stock",
+          "shelf_location": {
+            "aisle_id": "A3",
+            "shelf_id": "S20",
+            "location": { "x": 7.4, "y": 3.2 },
+            "shelf_position": "middle"
+          }
+        },
+        {
+          "id": "P007",
+          "name": "Cookies",
+          "status": "out_of_stock",
+          "shelf_location": {
+            "aisle_id": "A3",
+            "shelf_id": "S21",
+            "location": { "x": 8.5, "y": 4.8 },
+            "shelf_position": "top"
+          }
+        }
+      ]
+    }
+  ]
+}
