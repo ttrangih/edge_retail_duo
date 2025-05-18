@@ -44,14 +44,19 @@ def get_products_by_category(category_id: str):
         "products": category["products"]
     }
 
-def find_products_by_keyword(keyword: str):
+def find_products_with_status_and_location(keyword: str):
     data = load_mock_data()
     matches = []
 
     for category in data.get("categories", []):
         for product in category.get("products", []):
             if keyword.lower() in product["name"].lower():
-                matches.append(product)
+                matches.append({
+                    "product_id": product["id"],
+                    "name": product["name"],
+                    "status": product["status"],
+                    "shelf_location": product["shelf_location"]
+                })
 
     if not matches:
         raise HTTPException(status_code=404, detail="No products match your keyword")
