@@ -10,10 +10,12 @@ def load_mock_data():
 
 def find_product(product_id: str):
     data = load_mock_data()
-    for product in data.get("products", []):
-        if product["id"] == product_id:
-            return product
+    for category in data.get("categories", []):
+        for product in category.get("products", []):
+            if product["id"] == product_id:
+                return product
     raise HTTPException(status_code=404, detail="Product not found")
+
 
 def get_product_status(product_id: str):
     product = find_product(product_id)
