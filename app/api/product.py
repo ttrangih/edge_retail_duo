@@ -22,5 +22,6 @@ def get_product_category(category_id: str):
 
 @router.get("/search")
 def search_by_keyword(name: str):
-    from app.services.product_service import find_products_by_keyword
-    return find_products_by_keyword(name)
+    from app.services.product_service import find_products_with_status_and_location
+    return find_products_with_status_and_location(name)
+
