@@ -19,3 +19,8 @@ def api_get_product_info(product_id: str) -> Dict:
 @router.get("/category")
 def get_product_category(category_id: str):
     return get_products_by_category(category_id)
+
+@router.get("/search")
+def search_by_keyword(name: str):
+    from app.services.product_service import find_products_by_keyword
+    return find_products_by_keyword(name)
