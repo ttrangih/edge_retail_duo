@@ -15,6 +15,28 @@
             "shelf_position": "middle"
           }
         },
+         {
+          "id": "P015",
+          "name": "Oatside Milk",
+          "status": "in_stock",
+          "shelf_location": {
+            "aisle_id": "A2",
+            "shelf_id": "S10",
+            "location": { "x": 11.4, "y": 8.4 },
+            "shelf_position": "middle"
+          }
+        },
+         {
+          "id": "P021",
+          "name": "Meadow Milk",
+          "status": "in_stock",
+          "shelf_location": {
+            "aisle_id": "A1",
+            "shelf_id": "S10",
+            "location": { "x": 10.4, "y": 9.2 },
+            "shelf_position": "middle"
+          }
+        },
         {
           "id": "P002",
           "name": "Green Tea",
