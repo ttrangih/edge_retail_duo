@@ -12,7 +12,7 @@ def find_product(product_id: str):
     data = load_mock_data()
     for category in data.get("categories", []):
         for product in category.get("products", []):
-            if product["id"] == product_id:
+            if product["id"].lower() == product_id.lower():
                 return product
     raise HTTPException(status_code=404, detail="Product not found")
 
@@ -31,7 +31,10 @@ def get_product_info(product_id: str):
 
 def get_products_by_category(category_id: str):
     data = load_mock_data()
-    category = next((cat for cat in data["categories"] if cat["id"] == category_id), None)
+    category = next(
+    (cat for cat in data["categories"] if cat["id"].lower() == category_id.lower()),
+    None
+)
     
     if category is None:
         raise HTTPException(status_code=404, detail="Category not found")
