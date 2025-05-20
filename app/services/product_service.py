@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.data.db import SessionLocal
-from app.models import Product
+from app.models.models import Product
 from fastapi import HTTPException
 
 # 🔁 Sử dụng database thay vì đọc file JSON
