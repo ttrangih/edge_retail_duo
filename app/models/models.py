@@ -12,3 +12,4 @@ class Product(Base):
     x = Column(Float)
     y = Column(Float)
     shelf_position = Column(String)
+    category_id = Column(String)
