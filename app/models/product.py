@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from app.data.db import SessionLocal
-from app.models import Product
+from app.models.models import Product
+from app.models.schemas import ProductSchema
 
 router = APIRouter()
 
@@ -14,20 +15,21 @@ def get_db():
         db.close()
 
 
-@router.post("/")
-def create_product(product: Product, db: Session = Depends(get_db)):
-    db.add(product)
+@router.post("/", response_model=ProductSchema)
+def create_product(product: ProductSchema, db: Session = Depends(get_db)):
+    new_product = Product(**product.dict())
+    db.add(new_product)
     db.commit()
-    db.refresh(product)
-    return product
+    db.refresh(new_product)
+    return new_product
 
 
-@router.get("/")
+@router.get("/", response_model=list[ProductSchema])
 def read_all_products(db: Session = Depends(get_db)):
     return db.query(Product).all()
 
 
-@router.get("/{product_id}")
+@router.get("/{product_id}", response_model=ProductSchema)
 def read_product(product_id: str, db: Session = Depends(get_db)):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
@@ -35,15 +37,14 @@ def read_product(product_id: str, db: Session = Depends(get_db)):
     return product
 
 
-@router.put("/{product_id}")
-def update_product(product_id: str, updated: Product, db: Session = Depends(get_db)):
+@router.put("/{product_id}", response_model=ProductSchema)
+def update_product(product_id: str, updated: ProductSchema, db: Session = Depends(get_db)):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
 
-    for key, value in updated.__dict__.items():
-        if key != "_sa_instance_state":
-            setattr(product, key, value)
+    for key, value in updated.dict().items():
+        setattr(product, key, value)
 
     db.commit()
     db.refresh(product)
@@ -58,4 +59,3 @@ def delete_product(product_id: str, db: Session = Depends(get_db)):
     db.delete(product)
     db.commit()
     return {"message": f"Product {product_id} deleted successfully"}
-
