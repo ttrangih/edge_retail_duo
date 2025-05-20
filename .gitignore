@@ -1,3 +1,18 @@
 venv/
 .env
 _pycache_/
+# Bỏ qua file tạm
+*.pyc
+*.pyo
+
+
+# Bỏ database nếu không cần
+*.sqlite3
+*.db
+
+# VSCode settings (tuỳ chọn)
+.vscode/
+
+# Mac/Linux/Windows system files
+.DS_Store
+Thumbs.db
