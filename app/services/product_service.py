@@ -1,65 +1,112 @@
-import json
-from pathlib import Path
+from sqlalchemy.orm import Session
+from app.data.db import SessionLocal
+from app.models import Product
 from fastapi import HTTPException
 
-MOCK_FILE = Path("app/data/mock_data.json")
-
-def load_mock_data():
-    with open(MOCK_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+# 🔁 Sử dụng database thay vì đọc file JSON
 
 def find_product(product_id: str):
-    data = load_mock_data()
-    for category in data.get("categories", []):
-        for product in category.get("products", []):
-            if product["id"].lower() == product_id.lower():
-                return product
-    raise HTTPException(status_code=404, detail="Product not found")
+    db: Session = SessionLocal()
+    product = (
+        db.query(Product)
+        .filter(Product.id.ilike(product_id))
+        .first()
+    )
+    db.close()
+
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    return product
 
 
 def get_product_status(product_id: str):
     product = find_product(product_id)
-    return {"product_id": product["id"], "status": product["status"]}
+    return {"product_id": product.id, "status": product.status}
+
 
 def get_shelf_location(product_id: str):
     product = find_product(product_id)
-    return {"product_id": product["id"], "location": product["shelf_location"]}
+    return {
+        "product_id": product.id,
+        "location": {
+            "aisle_id": product.aisle_id,
+            "shelf_id": product.shelf_id,
+            "location": {"x": product.x, "y": product.y},
+            "shelf_position": product.shelf_position
+        }
+    }
+
 
 def get_product_info(product_id: str):
     product = find_product(product_id)
-    return product
+    return {
+        "product_id": product.id,
+        "name": product.name,
+        "status": product.status,
+        "shelf_location": {
+            "aisle_id": product.aisle_id,
+            "shelf_id": product.shelf_id,
+            "location": {"x": product.x, "y": product.y},
+            "shelf_position": product.shelf_position
+        }
+    }
+
 
 def get_products_by_category(category_id: str):
-    data = load_mock_data()
-    category = next(
-    (cat for cat in data["categories"] if cat["id"].lower() == category_id.lower()),
-    None
-)
-    
-    if category is None:
+    db: Session = SessionLocal()
+    products = (
+        db.query(Product)
+        .filter(Product.category_id.ilike(category_id))
+        .all()
+    )
+    db.close()
+
+    if not products:
         raise HTTPException(status_code=404, detail="Category not found")
 
     return {
-        "category": category["name"],
-        "products": category["products"]
+        "category": category_id,
+        "products": [
+            {
+                "product_id": p.id,
+                "name": p.name,
+                "status": p.status,
+                "shelf_location": {
+                    "aisle_id": p.aisle_id,
+                    "shelf_id": p.shelf_id,
+                    "location": {"x": p.x, "y": p.y},
+                    "shelf_position": p.shelf_position
+                }
+            }
+            for p in products
+        ]
     }
 
+
 def find_products_with_status_and_location(keyword: str):
-    data = load_mock_data()
-    matches = []
+    db: Session = SessionLocal()
+    products = (
+        db.query(Product)
+        .filter(Product.name.ilike(f"%{keyword}%"))
+        .all()
+    )
+    db.close()
 
-    for category in data.get("categories", []):
-        for product in category.get("products", []):
-            if keyword.lower() in product["name"].lower():
-                matches.append({
-                    "product_id": product["id"],
-                    "name": product["name"],
-                    "status": product["status"],
-                    "shelf_location": product["shelf_location"]
-                })
-
-    if not matches:
+    if not products:
         raise HTTPException(status_code=404, detail="No products match your keyword")
 
-    return matches
-
+    return [
+        {
+            "product_id": p.id,
+            "name": p.name,
+            "status": p.status,
+            "shelf_location": {
+                "aisle_id": p.aisle_id,
+                "shelf_id": p.shelf_id,
+                "location": {"x": p.x, "y": p.y},
+                "shelf_position": p.shelf_position
+            }
+        }
+        for p in products
+    ]
